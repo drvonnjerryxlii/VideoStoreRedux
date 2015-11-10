@@ -33,7 +33,17 @@ namespace VideoStoreRedux.Data_Layer
         #region MovieRepository.Find
         public Movie Find(int id)
         {
-            throw new NotImplementedException();
+            // package id for query
+            var dbArgs = new DynamicParameters();
+            dbArgs.Add("id", id);
+
+            // query DB
+            Movie movie = this.db.Query<Movie>(
+              "select * from movie where id=@id", dbArgs
+            ).First();
+
+            // return movie (or return null if no movie)
+            return movie ? movie : null;
         }
         #endregion
 

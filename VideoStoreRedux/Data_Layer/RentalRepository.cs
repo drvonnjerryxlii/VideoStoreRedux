@@ -33,7 +33,17 @@ namespace VideoStoreRedux.Data_Layer
         #region RentalRepository.Find
         public Rental Find(int id)
         {
-            throw new NotImplementedException();
+            // package id for query
+            var dbArgs = new DynamicParameters();
+            dbArgs.Add("id", id);
+
+            // query DB
+            Rental rental = this.db.Query<Rental>(
+              "select * from rental where id=@id", dbArgs
+            ).First();
+
+            // return rental (or return null if no rental)
+            return rental ? rental : null;
         }
         #endregion
 

@@ -33,7 +33,17 @@ namespace VideoStoreRedux.Data_Layer
         #region CustomerRepository.Find
         public Customer Find(int id)
         {
-            throw new NotImplementedException();
+            // package id for query
+            var dbArgs = new DynamicParameters();
+            dbArgs.Add("id", id);
+
+            // query DB
+            Customer customer = this.db.Query<Customer>(
+              "select * from customer where id=@id", dbArgs
+            ).First();
+
+            // return customer (or return null if no customer)
+            return customer ? customer : null;
         }
         #endregion
 
