@@ -9,7 +9,7 @@ using Dapper;
 
 namespace VideoStoreRedux.Data_Layer
 {
-    public class MovieRepository : IMovieRepository
+    public class MovieRepository //: IMovieRepository
     {
         // models are just an object class w/ no methods
         // only properties
@@ -25,9 +25,9 @@ namespace VideoStoreRedux.Data_Layer
         // database connection
         private IDbConnection db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
 
-        private static int getNextId()
+        private int getNextId()
         {
-            int maxId = db.Query<int>("SELECT MAX(id) FROM Movie;").SingleOrDefault() ?? 0;
+            int maxId = this.db.Query<int?>("SELECT MAX(id) FROM Movie;").SingleOrDefault() ?? 0;
             return maxId + 1;
         }
 
@@ -35,7 +35,7 @@ namespace VideoStoreRedux.Data_Layer
         #region MovieRepository.Create
         public Movie Create(Movie movie)
         {
-            int id = Movie.getNextId();
+            int id = this.getNextId();
 
             var sqlQuery = string.Format("INSERT INTO Movie (id, title, overview, release_year, inventory) VALUES({0}, @Title, @Overview, @ReleaseYear, @Inventory);", id);
 

@@ -9,7 +9,7 @@ using Dapper;
 
 namespace VideoStoreRedux.Data_Layer
 {
-    public class RentalRepository : IRentalRepository
+    public class RentalRepository //: IRentalRepository
     {
         // database connection
         private IDbConnection db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
@@ -40,10 +40,10 @@ namespace VideoStoreRedux.Data_Layer
             // query DB
             Rental rental = this.db.Query<Rental>(
               "select * from rental where id=@id", dbArgs
-            ).First();
+            ).SingleOrDefault();
 
             // return rental (or return null if no rental)
-            return rental ? rental : null;
+            return rental;
         }
         #endregion
 

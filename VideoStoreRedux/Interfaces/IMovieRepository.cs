@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using VideoStoreRedux.Models;
+
 
 namespace VideoStoreRedux.Interfaces
 {
