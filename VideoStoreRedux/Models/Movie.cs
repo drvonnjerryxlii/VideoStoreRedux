@@ -12,5 +12,6 @@ namespace VideoStoreRedux.Models
         public string Overview { get; set; }
         public int ReleaseYear { get; set; }
         public int Inventory { get; set; }
+
     }
 }

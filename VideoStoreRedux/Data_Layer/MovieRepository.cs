@@ -11,14 +11,37 @@ namespace VideoStoreRedux.Data_Layer
 {
     public class MovieRepository : IMovieRepository
     {
+        // models are just an object class w/ no methods
+        // only properties
+
+        // repositories connect to DB
+        // id assignment should be in the repo
+
+        // factories
+        // if you need an id the moment you create a movie
+        // order the posters, etc
+        // this is called the FACTORY PATTERN
+
         // database connection
         private IDbConnection db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
+
+        private static int getNextId()
+        {
+            int maxId = db.Query<int>("SELECT MAX(id) FROM Movie;").SingleOrDefault() ?? 0;
+            return maxId + 1;
+        }
 
         // Create
         #region MovieRepository.Create
         public Movie Create(Movie movie)
         {
-            throw new NotImplementedException();
+            int id = Movie.getNextId();
+
+            var sqlQuery = string.Format("INSERT INTO Movie (id, title, overview, release_year, inventory) VALUES({0}, @Title, @Overview, @ReleaseYear, @Inventory);", id);
+
+            db.Query<Movie>(sqlQuery, movie);
+
+            return movie;
         }
         #endregion
 
@@ -38,12 +61,9 @@ namespace VideoStoreRedux.Data_Layer
             dbArgs.Add("id", id);
 
             // query DB
-            Movie movie = this.db.Query<Movie>(
-              "select * from movie where id=@id", dbArgs
-            ).First();
+            Movie movie = this.db.Query<Movie>("select * from movie where id=@id", dbArgs).SingleOrDefault();
 
-            // return movie (or return null if no movie)
-            return movie ? movie : null;
+            return movie;
         }
         #endregion
 
