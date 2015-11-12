@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using VideoStoreRedux.Models;
+using VideoStoreRedux.Data_Layer;
+
 
 namespace VideoStoreRedux.Controllers
 {
@@ -17,36 +16,20 @@ namespace VideoStoreRedux.Controllers
 
     public class CustomersController : ApiController
     {
-        static readonly ICustomerRepository repo = new CustomerRepository();
+        static readonly CustomerRepository repo = new CustomerRepository();
 
         // GET api/customers
-        public JsonResult Get()
+        public List<Customer> Get()
         {
             List<Customer> customers = repo.All();
-
-            if (customers.Count == 0)
-            {
-                return Json(new HttpResponseMessage(HttpStatusCode.NoContent));
-            }
-            else
-            {
-                return Json(customers);
-            }
+            return customers;
         }
 
         // GET api/customers/5
-        public JsonResult Get(int id)
+        public Customer Get(int id)
         {
             Customer customer = repo.Find(id);
-
-            if (customer == null)
-            {
-                return Json(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-            else
-            {
-                return Json(customer);
-            }
+            return customer;
         }
 
         // // DELETE api/customers/5

@@ -23,11 +23,11 @@ namespace VideoStoreRedux.Data_Layer
         // this is called the FACTORY PATTERN
 
         // database connection
-        private IDbConnection db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
+        private IDbConnection _db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
 
         private int getNextId()
         {
-            int maxId = this.db.Query<int?>("SELECT MAX(id) FROM Movie;").SingleOrDefault() ?? 0;
+            int maxId = _db.Query<int?>("SELECT MAX(id) FROM Movie;").SingleOrDefault() ?? 0;
             return maxId + 1;
         }
 
@@ -35,11 +35,11 @@ namespace VideoStoreRedux.Data_Layer
         #region MovieRepository.Create
         public Movie Create(Movie movie)
         {
-            int id = this.getNextId();
+            int id = getNextId();
 
             var sqlQuery = string.Format("INSERT INTO Movie (id, title, overview, release_year, inventory) VALUES({0}, @Title, @Overview, @ReleaseYear, @Inventory);", id);
 
-            db.Query<Movie>(sqlQuery, movie);
+            _db.Query<Movie>(sqlQuery, movie);
 
             return movie;
         }
@@ -49,7 +49,7 @@ namespace VideoStoreRedux.Data_Layer
         #region MovieRepository.All
         public List<Movie> All()
         {
-            return this.db.Query<Movie>("select * from movie").ToList();
+            return _db.Query<Movie>("select * from Movie;").ToList();
         }
         #endregion
 
@@ -61,7 +61,9 @@ namespace VideoStoreRedux.Data_Layer
             dbArgs.Add("id", id);
 
             // query DB
-            Movie movie = this.db.Query<Movie>("select * from movie where id=@id", dbArgs).SingleOrDefault();
+            Movie movie = _db.Query<Movie>(
+                "select * from Movie where id=@id;", dbArgs
+            ).SingleOrDefault();
 
             return movie;
         }
@@ -86,7 +88,12 @@ namespace VideoStoreRedux.Data_Layer
         #region MovieRepository.Delete
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            // package id for query
+            var dbArgs = new DynamicParameters();
+            dbArgs.Add("id", id);
+
+            // query DB
+            _db.Query<Movie>("delete * from Movie where id=@id;", dbArgs);
         }
         #endregion
     }

@@ -161,9 +161,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\RentalsController.cs" />
     <Compile Include="Data_Layer\CustomerRepository.cs" />
     <Compile Include="Data_Layer\MovieRepository.cs" />
     <Compile Include="Data_Layer\RentalRepository.cs" />

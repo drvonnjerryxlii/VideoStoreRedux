@@ -13,6 +13,34 @@ namespace VideoStoreRedux
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //     "Show", // Route name
+            //     "{controller}/{id}", // URL with parameters
+            //     new { action = "Show", id = @"\d+" }, // Parameter defaults
+            //     new { httpMethod = new HttpMethodConstraint("GET") }
+            //);
+
+            //routes.MapRoute(
+            //     "Create", // Route name
+            //     "{controller}/{id}", // URL with parameters
+            //     new { action = "Create", id = @"\d+" }, // Parameter defaults
+            //     new { httpMethod = new HttpMethodConstraint("POST") }
+            //);
+
+            //routes.MapRoute(
+            //     "Update", // Route name
+            //     "{controller}/{id}", // URL with parameters
+            //     new { action = "Update", id = @"\d+" }, // Parameter defaults
+            //     new { httpMethod = new HttpMethodConstraint("PUT") }
+            //);
+
+            //routes.MapRoute(
+            //     "Destroy", // Route name
+            //     "{controller}/{id}", // URL with parameters
+            //     new { action = "Destroy", id = @"\d+" }, // Parameter defaults
+            //     new { httpMethod = new HttpMethodConstraint("DELETE") }
+            //);
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

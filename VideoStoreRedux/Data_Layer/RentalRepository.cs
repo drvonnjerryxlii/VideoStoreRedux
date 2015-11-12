@@ -12,13 +12,25 @@ namespace VideoStoreRedux.Data_Layer
     public class RentalRepository //: IRentalRepository
     {
         // database connection
-        private IDbConnection db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
+        private IDbConnection _db = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFileName=C:\Users\AdaRockstar\Documents\visual studio 2015\Projects\VideoStoreRedux\VideoStoreRedux\App_Data\VideoStoreDB-Development.mdf;Integrated Security=True");
+
+        private int getNextId()
+        {
+            int maxId = _db.Query<int?>("SELECT MAX(id) FROM Rental;").SingleOrDefault() ?? 0;
+            return maxId + 1;
+        }
 
         // Create
         #region RentalRepository.Create
         public Rental Create(Rental rental)
         {
-            throw new NotImplementedException();
+            int id = getNextId();
+
+            var sqlQuery = string.Format("INSERT INTO Rental (id, movie_id, customer_id, returned, check_out_date) VALUES({0}, @MovieId, @CustomerId, @Returned, @CheckOutDate);", id);
+
+            _db.Query<Movie>(sqlQuery, rental);
+
+            return rental;
         }
         #endregion
 
@@ -26,7 +38,7 @@ namespace VideoStoreRedux.Data_Layer
         #region RentalRepository.All
         public List<Rental> All()
         {
-            return this.db.Query<Rental>("select * from rental").ToList();
+            return _db.Query<Rental>("select * from Rental;").ToList();
         }
         #endregion
 
@@ -38,11 +50,10 @@ namespace VideoStoreRedux.Data_Layer
             dbArgs.Add("id", id);
 
             // query DB
-            Rental rental = this.db.Query<Rental>(
-              "select * from rental where id=@id", dbArgs
+            Rental rental = _db.Query<Rental>(
+              "select * from Rental where id=@id;", dbArgs
             ).SingleOrDefault();
 
-            // return rental (or return null if no rental)
             return rental;
         }
         #endregion
@@ -66,7 +77,12 @@ namespace VideoStoreRedux.Data_Layer
         #region RentalRepository.Delete
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            // package id for query
+            var dbArgs = new DynamicParameters();
+            dbArgs.Add("id", id);
+
+            // query DB
+            _db.Query<Rental>("delete * from Rental where id=@id;", dbArgs);
         }
         #endregion
     }
